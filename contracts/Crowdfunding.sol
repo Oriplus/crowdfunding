@@ -6,8 +6,8 @@ contract Crowdfunding {
   string public id;
   string public projectName;
   string public description;
-  address public author;
-  bool public status;
+  address payable public author;
+  bool public active;
   uint public funds;
   uint public fundsGoal;
 
@@ -17,5 +17,32 @@ contract Crowdfunding {
     description =_description;
     fundsGoal =_fundsGoal;
     author = payable(msg.sender);
+  }
+
+  modifier notOwner() {
+    require(
+      msg.sender != author,
+      "Owners can not fund their own projects"
+    );
+    _;
+  }
+
+  modifier onlyOwner() {
+    require(
+      msg.sender == author,
+      "Only the owner can changes the status of the Project"
+    );
+    _;
+  }
+
+  /** Sends Eth to the project */
+  function fundProject() public payable notOwner{
+    author.transfer(msg.value);
+    funds += msg.value;
+  }
+
+  /** Change the status of the project */
+  function changeStatus(bool _active) public onlyOwner{
+    active = _active;
   }
 }
