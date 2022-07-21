@@ -21,8 +21,10 @@ describe('Crowdfunding contract', () => {
   }
 
   async function createProject() {
-    const { crowdfunding, owner, addr1} = await loadFixture(deployCrowfundingFixture);
-    const values = {id: 'pro001', projectName: 'project 1', description: "I'm the first project here", fundsGoal: hre.ethers.utils.parseEther('2.0') }
+    const { crowdfunding, owner, addr1 } = await loadFixture(deployCrowfundingFixture);
+    const values = {
+      id: 'pro001', projectName: 'project 1', description: "I'm the first project here", fundsGoal: hre.ethers.utils.parseEther('2.0'),
+    };
     await crowdfunding.createProject(
       values.id,
       values.projectName,
@@ -32,13 +34,24 @@ describe('Crowdfunding contract', () => {
     const [id, projectName, description, author, active, funds, fundsGoal] = await crowdfunding.projects(0);
     return {
       values,
-      id, projectName, description, author, active, funds, fundsGoal, owner, addr1, crowdfunding
+      id,
+      projectName,
+      description,
+      author,
+      active,
+      funds,
+      fundsGoal,
+      owner,
+      addr1,
+      crowdfunding,
     };
   }
 
   it('Should fail. Goal must be greater than 0', async () => {
     const { crowdfunding } = await loadFixture(deployCrowfundingFixture);
-    const values = {id: 'pro001', projectName: 'project 1', description: "I'm the first project here", fundsGoal: hre.ethers.utils.parseEther('0') }
+    const values = {
+      id: 'pro001', projectName: 'project 1', description: "I'm the first project here", fundsGoal: hre.ethers.utils.parseEther('0'),
+    };
     await expect(crowdfunding.createProject(
       values.id,
       values.projectName,
@@ -65,22 +78,22 @@ describe('Crowdfunding contract', () => {
   });
 
   it('Author of the Project', async () => {
-    const {author, owner} = await loadFixture(createProject);
+    const { author, owner } = await loadFixture(createProject);
     expect(author).equal(owner.address);
   });
 
   it('Status of the project', async () => {
-    const {active} = await loadFixture(createProject);
+    const { active } = await loadFixture(createProject);
     expect(active).to.equal(1);
   });
 
   it('Project funds', async () => {
-    const {funds} = await loadFixture(createProject);
+    const { funds } = await loadFixture(createProject);
     expect(funds).to.equal(0);
   });
 
   it('Project funds goal', async () => {
-    const {fundsGoal, values} = await loadFixture(createProject);
+    const { fundsGoal, values } = await loadFixture(createProject);
     expect(fundsGoal).to.equal(values.fundsGoal);
   });
 
