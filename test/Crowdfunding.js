@@ -102,7 +102,7 @@ describe('Crowdfunding contract', () => {
       const { crowdfunding, addr1 } = await loadFixture(createProject);
       const options = { value: hre.ethers.utils.parseEther('1') };
       await expect(crowdfunding.connect(addr1).fundProject(0, options)).to.emit(crowdfunding, 'projectFunded').withArgs(options.value, 'pro001');
-      const [id, projectName, description, author, active, funds, fundsGoal] = await crowdfunding.projects(0);
+      const [, , , , , funds] = await crowdfunding.projects(0);
       expect(await funds).to.equal(options.value);
     });
 
@@ -136,7 +136,7 @@ describe('Crowdfunding contract', () => {
     it('Owner changes the status of the Project', async () => {
       const { crowdfunding, owner } = await loadFixture(createProject);
       await expect(crowdfunding.connect(owner).changeStatus(0, 0)).to.emit(crowdfunding, 'statusProject').withArgs(0, 'pro001');
-      const [id, projectName, description, author, active, funds, fundsGoal] = await crowdfunding.projects(0);
+      const [, , , , active] = await crowdfunding.projects(0);
       expect(active).to.equal(0);
     });
 
