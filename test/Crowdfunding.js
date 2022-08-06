@@ -31,7 +31,14 @@ describe('Crowdfunding contract', () => {
       values.description,
       values.fundsGoal,
     );
-    const [id, projectName, description, author, active, funds, fundsGoal] = await crowdfunding.projects(0);
+    const [id,
+      projectName,
+      description,
+      author,
+      active,
+      funds,
+      fundsGoal] = await crowdfunding.projects(0);
+
     return {
       values,
       id,
